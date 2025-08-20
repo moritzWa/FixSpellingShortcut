@@ -4,9 +4,27 @@ import time
 import requests
 import subprocess
 import os
+from pathlib import Path
+
+# Load environment variables from .env file
+def load_env():
+    env_path = Path(__file__).parent / '.env'
+    if env_path.exists():
+        with open(env_path) as f:
+            for line in f:
+                if line.strip() and not line.startswith('#'):
+                    key, value = line.strip().split('=', 1)
+                    os.environ[key] = value
+
+load_env()
 
 # Initialize API settings
-GROQ_API_KEY = "your_groq_api_key_here"  # Replace with your actual Groq API key
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+if not GROQ_API_KEY:
+    print("❌ Error: GROQ_API_KEY not found!")
+    print("Please create a .env file with your API key:")
+    print("echo 'GROQ_API_KEY=your_actual_api_key_here' > .env")
+    exit(1)
     
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
@@ -53,7 +71,7 @@ def check_accessibility_permissions():
         return False
 
 # Add test call at startup
-print("Starting fixkey.py...")
+print("Starting FixSpellingShortcut...")
 check_accessibility_permissions()
 test_groq_connection()
 

@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.user.fixkey</string>
+    <string>com.user.fixspellingshortcut</string>
     
     <key>ProgramArguments</key>
     <array>
         <string>/usr/bin/python3</string>
-        <string>/Users/m/fixkey.py</string>
+        <string>/Users/m/FixSpellingShortcut.py</string>
     </array>
     
     <key>RunAtLoad</key>

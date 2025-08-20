@@ -1,4 +1,4 @@
-# FixKey - AI-Powered Text Correction
+# FixSpellingShortcut - AI-Powered Text Correction
 
 An intelligent macOS application that automatically fixes typos and grammatical errors in any text input using AI.
 
@@ -29,74 +29,135 @@ An intelligent macOS application that automatically fixes typos and grammatical 
 
 ### Setup
 
-1. Clone this repository:
+1. **Clone this repository:**
    ```bash
    git clone <repository-url>
-   cd fixkey-project
+   cd FixSpellingShortcut
    ```
 
-2. Install dependencies:
+2. **Install Python dependencies:**
    ```bash
-   pip install pynput pyperclip requests
+   pip install -r requirements.txt
    ```
 
-3. Get your Groq API key and update `fixkey.py`:
-   ```python
-   GROQ_API_KEY = "your_groq_api_key_here"
-   ```
-
-4. Set up the launch agent for auto-start:
+3. **Set up your API key:**
    ```bash
-   cp com.user.fixkey.plist ~/Library/LaunchAgents/
-   chmod +x manage_fixkey.sh
-   ./manage_fixkey.sh start
+   # Copy the environment template
+   cp .env.example .env
+   
+   # Edit .env and add your Groq API key
+   echo "GROQ_API_KEY=your_actual_groq_api_key_here" > .env
+   ```
+   
+   Get your free API key at [groq.com](https://groq.com)
+
+4. **Test the script:**
+   ```bash
+   python FixSpellingShortcut.py
+   ```
+   You should see:
+   ```
+   Starting FixSpellingShortcut...
+   ✅ Accessibility permissions granted!
+   ✅ Groq API Test Success!
+   Listening for Cmd+Shift+L...
+   ```
+   Press `Ctrl+C` to stop the test.
+
+5. **Set up auto-start service:**
+   ```bash
+   # Copy the launch agent
+   cp com.user.fixspellingshortcut.plist ~/Library/LaunchAgents/
+   
+   # Make management script executable
+   chmod +x manage_fixspellingshortcut.sh
+   
+   # Start the service
+   ./manage_fixspellingshortcut.sh start
    ```
 
-5. Grant accessibility permissions:
-   - Go to System Preferences > Security & Privacy > Privacy > Accessibility
-   - Add your Terminal (or Python) to the allowed applications
+6. **Grant macOS permissions:**
+   
+   The script needs two permissions:
+   
+   **a) Accessibility Permissions:**
+   - Go to: **System Preferences > Security & Privacy > Privacy > Accessibility**
+   - Click the lock and enter your password
+   - Click "+" and add **Terminal** (or your Python app)
+   - Ensure it's checked ✅
+   
+   **b) Input Monitoring (if prompted):**
+   - Go to: **System Preferences > Security & Privacy > Privacy > Input Monitoring**
+   - Add **Terminal** if macOS requests it
+   
+   💡 **Tip:** If permissions fail, try running the script directly first:
+   ```bash
+   python FixSpellingShortcut.py
+   ```
+   This will trigger permission prompts.
 
 ## Usage
 
-1. Start the service: `./manage_fixkey.sh start`
-2. In any application, type some text with typos
-3. Press `Cmd+Shift+L` to trigger correction
-4. The text will be automatically corrected in place
+1. **Start the service:**
+   ```bash
+   ./manage_fixspellingshortcut.sh start
+   ```
+
+2. **Use in any application:**
+   - Type some text with typos
+   - Press `Cmd+Shift+L` to trigger correction
+   - The text will be automatically corrected in place
+
+3. **Example:**
+   ```
+   Before: "This is a mesage with speling mistakes"
+   After:  "This is a message with spelling mistakes"
+   ```
 
 ## Service Management
 
 Use the included management script:
 
 ```bash
-./manage_fixkey.sh start    # Start the service
-./manage_fixkey.sh stop     # Stop the service
-./manage_fixkey.sh restart  # Restart the service
-./manage_fixkey.sh status   # Check status
-./manage_fixkey.sh logs     # View logs
+./manage_fixspellingshortcut.sh start    # Start the service
+./manage_fixspellingshortcut.sh stop     # Stop the service
+./manage_fixspellingshortcut.sh restart  # Restart after changes
+./manage_fixspellingshortcut.sh status   # Check if running
+./manage_fixspellingshortcut.sh logs     # View recent logs
 ```
 
 ## Configuration
 
 ### Custom Hotkey
 
-To change the hotkey, modify the key detection in `fixkey.py`:
+To change the hotkey, modify the key detection in `FixSpellingShortcut.py`:
 
 ```python
 # Current: Cmd+Shift+L
 if (cmd_pressed and shift_pressed and 
     hasattr(key, 'char') and key.char == 'l'):
+    # Change 'l' to your preferred key
 ```
 
 ### Excluded Applications
 
-Add applications to skip in the `should_skip_app()` function:
+Add applications to skip in the `should_skip_app()` function in `FixSpellingShortcut.py`:
 
 ```python
 excluded_apps = [
     "Cursor",
     "Visual Studio Code",
-    # Add your apps here
+    "Your App Name",  # Add your apps here
 ]
+```
+
+### Environment Variables
+
+Edit your `.env` file to customize:
+
+```bash
+# Your Groq API key
+GROQ_API_KEY=your_actual_api_key_here
 ```
 
 ## Contributing

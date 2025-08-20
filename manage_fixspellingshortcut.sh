@@ -1,27 +1,27 @@
 #!/bin/bash
 
-PLIST_PATH="$HOME/Library/LaunchAgents/com.user.fixkey.plist"
-SERVICE_NAME="com.user.fixkey"
+PLIST_PATH="$HOME/Library/LaunchAgents/com.user.fixspellingshortcut.plist"
+SERVICE_NAME="com.user.fixspellingshortcut"
 
 case "$1" in
     start)
-        echo "🚀 Starting fixkey service..."
+        echo "🚀 Starting FixSpellingShortcut service..."
         launchctl load "$PLIST_PATH"
         echo "✅ Service started!"
         ;;
     stop)
-        echo "⏹️  Stopping fixkey service..."
+        echo "⏹️  Stopping FixSpellingShortcut service..."
         launchctl unload "$PLIST_PATH"
         echo "✅ Service stopped!"
         ;;
     restart)
-        echo "🔄 Restarting fixkey service..."
+        echo "🔄 Restarting FixSpellingShortcut service..."
         launchctl unload "$PLIST_PATH"
         launchctl load "$PLIST_PATH"
         echo "✅ Service restarted!"
         ;;
     status)
-        echo "📊 Checking fixkey service status..."
+        echo "📊 Checking FixSpellingShortcut service status..."
         if launchctl list | grep -q "$SERVICE_NAME"; then
             echo "✅ Service is running"
             launchctl list | grep "$SERVICE_NAME"
@@ -41,9 +41,9 @@ case "$1" in
         echo "Usage: $0 {start|stop|restart|status|logs}"
         echo ""
         echo "Commands:"
-        echo "  start   - Start the fixkey service"
-        echo "  stop    - Stop the fixkey service"
-        echo "  restart - Restart the fixkey service"
+        echo "  start   - Start the FixSpellingShortcut service"
+        echo "  stop    - Stop the FixSpellingShortcut service"
+        echo "  restart - Restart the FixSpellingShortcut service"
         echo "  status  - Show service status"
         echo "  logs    - Show recent logs"
         exit 1
