@@ -35,9 +35,10 @@ An intelligent macOS application that automatically fixes typos and grammatical 
    cd FixSpellingShortcut
    ```
 
-2. **Install Python dependencies:**
+2. **Create virtual environment and install dependencies:**
    ```bash
-   pip install -r requirements.txt
+   python3 -m venv venv
+   ./venv/bin/pip install -r requirements.txt
    ```
 
 3. **Set up your API key:**
@@ -53,7 +54,7 @@ An intelligent macOS application that automatically fixes typos and grammatical 
 
 4. **Test the script:**
    ```bash
-   python FixSpellingShortcut.py
+   ./venv/bin/python FixSpellingShortcut.py
    ```
    You should see:
    ```
@@ -64,17 +65,16 @@ An intelligent macOS application that automatically fixes typos and grammatical 
    ```
    Press `Ctrl+C` to stop the test.
 
-5. **Set up auto-start service:**
+5. **Set up auto-start on login:**
    ```bash
-   # Copy the launch agent
-   cp com.user.fixspellingshortcut.plist ~/Library/LaunchAgents/
-   
-   # Make management script executable
-   chmod +x manage_fixspellingshortcut.sh
-   
-   # Start the service
-   ./manage_fixspellingshortcut.sh start
+   # Make the startup script executable
+   chmod +x start_fixspelling.sh
    ```
+   
+   Then add to Login Items:
+   - Open **System Preferences** → **Users & Groups** → **Login Items**
+   - Click **"+"** and navigate to your project folder
+   - Select `start_fixspelling.sh` and click **Add**
 
 6. **Grant macOS permissions:**
    
@@ -98,9 +98,9 @@ An intelligent macOS application that automatically fixes typos and grammatical 
 
 ## Usage
 
-1. **Start the service:**
+1. **Start FixSpellingShortcut (if not auto-starting):**
    ```bash
-   ./manage_fixspellingshortcut.sh start
+   ./start_fixspelling.sh
    ```
 
 2. **Use in any application:**
@@ -114,16 +114,19 @@ An intelligent macOS application that automatically fixes typos and grammatical 
    After:  "This is a message with spelling mistakes"
    ```
 
-## Service Management
+## Manual Control
 
-Use the included management script:
+If you need to manually start/stop the service:
 
 ```bash
-./manage_fixspellingshortcut.sh start    # Start the service
-./manage_fixspellingshortcut.sh stop     # Stop the service
-./manage_fixspellingshortcut.sh restart  # Restart after changes
-./manage_fixspellingshortcut.sh status   # Check if running
-./manage_fixspellingshortcut.sh logs     # View recent logs
+# Start manually
+./start_fixspelling.sh
+
+# Stop (find and kill the process)
+pkill -f "FixSpellingShortcut.py"
+
+# Check if running
+ps aux | grep FixSpellingShortcut.py
 ```
 
 ## Configuration
@@ -175,7 +178,7 @@ GROQ_API_KEY=your_actual_api_key_here
 ## Support
 
 - Create an issue for bugs or feature requests
-- Check logs with `./manage_fixkey.sh logs` for troubleshooting
+- Check logs at `~/FixSpellingShortcut.log` for troubleshooting
 
 ## Acknowledgments
 

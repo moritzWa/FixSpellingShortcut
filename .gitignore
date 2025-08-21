@@ -75,5 +75,5 @@ Temporary Items
 *.swo
 
 # User-specific files
-fixkey_error.log
-fixkey.log
+FixSpellingShortcut_error.log
+FixSpellingShortcut.log
