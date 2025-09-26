@@ -2,6 +2,9 @@
 
 An intelligent macOS application that automatically fixes typos and grammatical errors in any text input using AI.
 
+![2025-09-26 11 34 12](https://github.com/user-attachments/assets/0756c962-ba51-4459-9212-2c141ce08bd2)
+
+
 ## Features
 
 - 🚀 **System-wide hotkey** (`Cmd+Shift+L`) for instant text correction
