@@ -67,14 +67,9 @@ An intelligent macOS application that automatically fixes typos and grammatical 
 
 5. **Set up auto-start on login:**
    ```bash
-   # Make the startup script executable
-   chmod +x start_fixspelling.sh
+   ./setup_launchagent.sh
    ```
-   
-   Then add to Login Items:
-   - Open **System Preferences** → **Users & Groups** → **Login Items**
-   - Click **"+"** and navigate to your project folder
-   - Select `start_fixspelling.sh` and click **Add**
+   This script automatically creates and loads a LaunchAgent for reliable auto-start.
 
 6. **Grant macOS permissions:**
    
@@ -116,18 +111,50 @@ An intelligent macOS application that automatically fixes typos and grammatical 
 
 ## Manual Control
 
-If you need to manually start/stop the service:
-
 ```bash
-# Start manually
-./start_fixspelling.sh
-
-# Stop (find and kill the process)
-pkill -f "FixSpellingShortcut.py"
-
 # Check if running
 ps aux | grep FixSpellingShortcut.py
+
+# Stop/Start (after setup_launchagent.sh)
+launchctl unload ~/Library/LaunchAgents/com.user.fixspellingshortcut.plist  # Stop
+launchctl load ~/Library/LaunchAgents/com.user.fixspellingshortcut.plist    # Start
+
+# Emergency stop (kills all instances)
+pkill -f "FixSpellingShortcut.py"
 ```
+
+## Troubleshooting
+
+### Common Issues
+
+**1. Multiple pastes when using hotkey:**
+- **Cause:** Multiple instances running
+- **Fix:** Kill all instances and restart:
+  ```bash
+  pkill -f "FixSpellingShortcut.py"
+  launchctl unload ~/Library/LaunchAgents/com.user.fixspellingshortcut.plist
+  launchctl load ~/Library/LaunchAgents/com.user.fixspellingshortcut.plist
+  ```
+
+**2. VS Code opens automatically on startup:**
+- **Cause:** Script file is in VS Code's recent files and you have Login Items
+- **Fix:** Use LaunchAgent instead of Login Items, or clear VS Code's recent files
+
+**3. "There is no text to fix" message:**
+- **Cause:** Text selection not working (permissions issue)
+- **Fix:** 
+  1. Check accessibility permissions in System Preferences
+  2. Make sure you have text selected or cursor positioned in text
+  3. Check logs: `tail -f ~/FixSpellingShortcut/fixspelling.log`
+
+**4. Import errors or Python module issues:**
+- **Cause:** Wrong Python environment
+- **Fix:** Make sure LaunchAgent uses the virtual environment path
+
+**5. Hotkey not working:**
+- **Check if script is running:** `ps aux | grep FixSpellingShortcut.py`
+- **Test manually:** Run `./venv/bin/python FixSpellingShortcut.py` to see startup messages
+- **Check logs:** Look at `fixspelling.log` and `fixspelling_error.log`
 
 ## Configuration
 
